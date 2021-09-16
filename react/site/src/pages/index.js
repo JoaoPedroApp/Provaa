@@ -3,7 +3,7 @@ import Menu from '../components/menu/index.js'
 import Conteudo from './conteudo.js'
 
 
-export default function devMonk() {
+export default function Prova() {
     return (
         <Container>
             <Menu />

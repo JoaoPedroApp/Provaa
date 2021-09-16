@@ -23,6 +23,15 @@ const ContainerMenu = styled.div`
         margin: 2.5em 5em 2.5em 4em;
     }
 
+    .cabecalho{
+    width: 190px;
+    height: 36px;
+    border-radius: 5px;
+    border: 1px solid #A8A8A8;
+    outline: none;
+    cursor: pointer;
+    }
+    
     .titulo {
         color: #10EAEA;
         font-size: 28px;

@@ -18,41 +18,35 @@ const api = new Api();
 
 export default function Conteudo() {
 
-    const [alunos, setAlunos] = useState([]);
-    const [aluno, setAluno] = useState('');
-    const [chamada, setChamada] = useState('');
-    const [curso, setCurso] = useState('');
-    const [turma, setTurma] = useState('');
-    const [idAlterando, setidAlterando] = useState(0);
+    const [nome, SetNome] =  useState('')
+    const [categoria, setCategoria] = useState([]);
+    const [avaliacao, setAvaliacao] = useState('');
+    const [precode, setPrecod] = useState('');
+    const [precopor, setPrecopor] = useState('');
+    const [estoque, setEstoque] = useState('');
+    const [link, setLink] = useState('');
+    const [descricao, setDescricao] = useState('');
+    const [idAlterando, setdAlterando] = useState(0);
 
-    const loading = useRef(null);
+   
 
-    async function listar() {
-        loading.current.continuousStart();
-
-        let r = await api.listarCadastros();
-        setAlunos(r);
-
-        loading.current.complete();
-    }
-
-    async function inserir() {
+    async function Listar() {
         if (idAlterando != 0) {
-            let alter = await api.alterarAluno(idAlterando, aluno, chamada, curso, turma);
+            let alter = await api.alterarProduto(nome, categoria, preco, avaliacao, produto, estoque, imagem );
             
             if (alter.erro)
-                toast.error(`❌ ${alter.erro}`)
+                toast.error(` ${alter.erro}`)
             else 
-                toast.dark('✔️ Aluno alterado com sucesso');
+                toast.dark(' Produto alterado com sucesso');
 
         } else {
-            let inse = await api.inserirAluno(aluno, chamada, curso, turma);
+            let inse = await api.inserirProduto(nome, categoria, preco, avaliacao, produto, estoque, imagem );
             
             if (inse.erro) {
-                toast.error(`❌ ${inse.erro}`)
+                toast.error(` ${inse.erro}`)
             }
             else {
-                toast.dark('✔️ Aluno inserido com sucesso');
+                toast.dark(' Produto inserido com sucesso');
             }
         }
 
@@ -60,27 +54,62 @@ export default function Conteudo() {
         listar();
     }
 
-    function limparCampos() {
-        setAluno('');
-        setChamada('');
-        setCurso('');
-        setTurma('');
-        setidAlterando(0);
+
+    async function inserir() {
+        if (idAlterando != 0) {
+            let alter = await api.alterarProduto(nome, categoria, preco, avaliacao, produto, estoque, imagem);
+            
+            if (alter.erro)
+                toast.error(` ${alter.erro}`)
+            else 
+                toast.dark('Produto alterado com sucesso');
+
+        } else {
+            let inse = await api.inserirProduto(nome, categoria, preco, avaliacao, produto, estoque, imagem);
+            
+            if (inse.erro) {
+                toast.error(` ${inse.erro}`)
+            }
+            else {
+                toast.dark('Produto inserido com sucesso');
+            }
+        }
+
+        limparCampos();
+        listar();
     }
 
-    async function remover(id) {
+
+
+    async function listar() {
+        loading.current.continuousStart();
+        let r = await api.listarCadastros();
+        setAlunos(r);
+        loading.current.complete();
+    }
+
+    
+    function limparCampos() {
+        SetNome('');
+        setCategoria('');
+        setPrecopor('');
+        setEstoque('');
+        setdAlterando(0)
+    }
+
+    async function removerProduto(id) {
         confirmAlert({
-            title: 'Remover aluno',
-            message: `Tem certeza que deseja remover o aluno ${id} ?`,
+            title: 'Remover produto',
+            message: `Tem certeza que deseja remover o produto ${id} ?`,
             buttons: [
               {
                 label: 'Sim',
                 onClick: async () => {
-                    let r = await api.removerAluno(id);
+                    let r = await api.removerProduto(id);
                     if (r.erro)
                         toast.error(`${r.erro}`);
                     else {
-                        toast.dark('✔️ Aluno removido!')
+                        toast.dark('Produto removido!')
                         listar();
                     }
                 }
@@ -92,12 +121,12 @@ export default function Conteudo() {
         });
     }
 
-    async function alterando(item) {
-        setAluno(item.nm_aluno);
-        setChamada(item.nr_chamada);
-        setCurso(item.nm_curso);
-        setTurma(item.nm_turma);
-        setidAlterando(item.id_matricula);
+    async function alterandoProduto(item) {
+        SetNome(item.nm_produto);
+        setCategoria(item.ds_categoria);
+        setPrecopor(item.vl_preco_por);
+        setEstoque(item.qtd_estoque);
+        setdAlterando(item.id_produto)    
     }
 
     useEffect(() => {
@@ -132,60 +161,54 @@ export default function Conteudo() {
                 <div className="containerInput1">
                     <div className="box-input">
                         <div className="label">Nome:</div>
-                        <input className="Imput" type="text" value={aluno} onChange={e => setAluno(e.target.value)} />
+                        <input className="Imput" type="text" value={nome} onChange={e => SetNome(e.target.value)} />
                     </div>
                 
                     <div className="box-input1">
                         <div className="label">Preço DE :</div>
-                        <input className="Imput" type="text" value={curso} onChange={e => setCurso(e.target.value)} />
+                        <input className="Imput" type="text" value={precode} onChange={e => setPrecod(e.target.value)} />
                     </div>
                 </div>
 
                 <div className="containerInput2">
                     <div className="box-input">
                         <div className="label">Categoria:</div>
-                        <input className="Imput" type="text" value={chamada} onChange={e => setChamada(e.target.value)} />
+                        <input className="Imput" type="text" value={categoria} onChange={e => setCategoria(e.target.value)} />
                     </div>
                 
                     <div className="box-input1">
                         <div className="label">Preço Por:</div>
-                        <input className="Imput" type="text" value={turma} onChange={e => setTurma(e.target.value)} />
+                        <input className="Imput" type="text" value={precopor} onChange={e => setPrecopor(e.target.value)} />
                     </div>
 
                     
                 </div>    
 
-
-
-
                 <div className="containerInput1">
                     <div className="box-input">
                         <div className="label">Avaliação:</div>
-                        <input className="Imput" type="text" value={aluno} onChange={e => setAluno(e.target.value)} />
+                        <input className="Imput" type="text" value={avaliacao} onChange={e => setAvaliacao(e.target.value)} />
                     </div>
                 
                     <div className="box-input1">
                         <div className="label">Estoque:</div>
-                        <input className="Imput" type="text" value={curso} onChange={e => setCurso(e.target.value)} />
+                        <input className="Imput" type="text" value={estoque} onChange={e => setEstoque(e.target.value)} />
                     </div>
                 </div>
 
                 <div className="containerInput2">
                     <div className="box-input">
                         <div className="label">Link imagem:</div>
-                        <input className="Imput" type="text" value={chamada} onChange={e => setChamada(e.target.value)} />
+                        <input className="Imput" type="text" value={link} onChange={e => setLink(e.target.value)} />
                     </div>
                 
                     <div className="box-input1">
                         <div className="label">Descrição:</div>
-                        <input className="Imput" type="text" value={turma} onChange={e => setTurma(e.target.value)} />
+                        <input className="Imput" type="text" value={descricao} onChange={e => setDescricao(e.target.value)} />
                     </div>
 
                     < div className="buttom"onClick={inserir} > {idAlterando === 0 ? 'Cadastrar' : 'Alterar'}</div>
                 </div>    
-
-
-
 
             </div> 
             
@@ -215,17 +238,21 @@ export default function Conteudo() {
                         {alunos.map((item, i) => 
 
                             <tr className={i % 2 === 0 ? "linha-alternada" : ""}>
-                                <td className="idTb1">{item.id_matricula}</td>
-                                
-                                <td title={item.nm_aluno}>
-                                    {item.nm_aluno != null && item.nm_aluno.length >= 25
-                                        ? item.nm_aluno.substr(0, 25) + '...'  : item.nm_aluno}       
+                                <td title={item.img_produto}>
+                                    <img src={item.img_produto} alt="" style={{ width: '40px', height: '40px'}} />
                                 </td>
-                                <td>{item.nr_chamada}</td>
-                                <td>{item.nm_turma}</td>
-                                <td>{item.nm_curso}</td>
-                                <td className="botao-visivel"> <button onClick={() => alterando(item) } > <img src="/assets/images/edit.png" alt="" /> </button> </td>
-                                <td className="botao-visivel"> <button onClick={() => remover(item.id_matricula) } > <img src="/assets/images/trash.png" alt="" /> </button> </td>
+                                <td className="idTb1">{item.id_produto}</td>
+                                
+                                <td title={item.nm_produto}>
+                                    {item.nm_produto != null && item.nm_produto.length >= 10
+                                        ? item.nm_produto.substr(0, 10) + '...'  : item.nm_produto}       
+                                </td>
+
+                                <td>{item.ds_categoria}</td>
+                                <td>{item.vl_preco_por}</td>
+                                <td>{item.qtd_estoque}</td>
+                                <td className="botao-visivel"> <button onClick={() => alterandoProduto(item) } > <img src="/assets/images/edit.png" alt="" /> </button> </td>
+                                <td className="botao-visivel"> <button onClick={() => removerProduto(item.id_produto) } > <img src="/assets/images/trash.png" alt="" /> </button> </td>
                             </tr>
 
                         )}
