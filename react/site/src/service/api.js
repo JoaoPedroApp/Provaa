@@ -4,23 +4,23 @@ const api = axios.create({
 })
 
 export default class Api {
-    async listarCadastros() {
-        let r = await api.get(`/matricula`);
+    async listarProdutos() {
+        let r = await api.get(`/produto`);
         return r.data;
     }
 
-    async inserirAluno(nome, chamada, curso, turma) {
-        let r = await api.post(`/matricula`, { nome, chamada, curso, turma });
+    async inserirProduto(nome, nome, categoria, preco, avaliacao, produto, estoque, imagem ) {
+        let r = await api.post(`/produto`, { nome, categoria, preco, avaliacao, produto, estoque, imagem });
         return r.data;
     }
 
-    async alterarAluno(id, nome, chamada, curso, turma) {
-        let r = await api.put('/matricula/' + id, { nome, chamada, curso, turma });
+    async alterarProduto(id,  nome, categoria, preco, avaliacao, produto, estoque, imagem ) {
+        let r = await api.put('/produto/' + id, {  nome, categoria, preco, avaliacao, produto, estoque, imagem  });
         return r.data;
     }
 
-    async removerAluno(id) {
-        let r = await api.delete('/matricula/' + id);
+    async removerProduto(id) {
+        let r = await api.delete('/produto/' + id);
         return r.data;
     }
 }
