@@ -28,11 +28,11 @@ export default function Conteudo() {
     const [descricao, setDescricao] = useState('');
     const [idAlterando, setdAlterando] = useState(0);
 
-   
+    const loading = useRef(null);
 
-    async function Listar() {
+    async function listar() {
         if (idAlterando != 0) {
-            let alter = await api.alterarProduto(nome, categoria, preco, avaliacao, produto, estoque, imagem );
+            let alter = await api.alterarProduto(nome, categoria, avaliacao, precode, precopor, estoque, link, descricao );
             
             if (alter.erro)
                 toast.error(` ${alter.erro}`)
@@ -40,7 +40,7 @@ export default function Conteudo() {
                 toast.dark(' Produto alterado com sucesso');
 
         } else {
-            let inse = await api.inserirProduto(nome, categoria, preco, avaliacao, produto, estoque, imagem );
+            let inse = await api.inserirProduto(nome, categoria, avaliacao, precode, precopor, estoque, link, descricao );
             
             if (inse.erro) {
                 toast.error(` ${inse.erro}`)
@@ -57,7 +57,7 @@ export default function Conteudo() {
 
     async function inserir() {
         if (idAlterando != 0) {
-            let alter = await api.alterarProduto(nome, categoria, preco, avaliacao, produto, estoque, imagem);
+            let alter = await api.alterarProduto(nome, categoria, avaliacao, precode, precopor, estoque, link, descricao );
             
             if (alter.erro)
                 toast.error(` ${alter.erro}`)
@@ -65,7 +65,7 @@ export default function Conteudo() {
                 toast.dark('Produto alterado com sucesso');
 
         } else {
-            let inse = await api.inserirProduto(nome, categoria, preco, avaliacao, produto, estoque, imagem);
+            let inse = await api.inserirProduto(nome, categoria, avaliacao, precode, precopor, estoque, link, descricao );
             
             if (inse.erro) {
                 toast.error(` ${inse.erro}`)
@@ -83,8 +83,8 @@ export default function Conteudo() {
 
     async function listar() {
         loading.current.continuousStart();
-        let r = await api.listarCadastros();
-        setAlunos(r);
+        let j = await api.listarCadastros();
+        SetNome(j);
         loading.current.complete();
     }
 
@@ -115,7 +115,7 @@ export default function Conteudo() {
                 }
               },
               {
-                label: 'Não'
+                label: 'Não deu'
               }
             ]
         });
@@ -204,7 +204,7 @@ export default function Conteudo() {
                 
                     <div className="box-input1">
                         <div className="label">Descrição:</div>
-                        <input className="Imput" type="text" value={descricao} onChange={e => setDescricao(e.target.value)} />
+                        <textarea className="textarea" rows="10" cols="91" value={descricao} onChange={e => setDescricao(e.target.value)}></textarea>
                     </div>
 
                     < div className="buttom"onClick={inserir} > {idAlterando === 0 ? 'Cadastrar' : 'Alterar'}</div>
@@ -235,7 +235,7 @@ export default function Conteudo() {
 
                     <tbody>
 
-                        {alunos.map((item, i) => 
+                        {nome.map((item, i) => 
 
                             <tr className={i % 2 === 0 ? "linha-alternada" : ""}>
                                 <td title={item.img_produto}>

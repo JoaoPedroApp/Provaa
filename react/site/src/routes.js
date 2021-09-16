@@ -1,7 +1,7 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import Prova from './pages/index.js'
 
-import Prova from './pages/index.js'
+
 
 
 
