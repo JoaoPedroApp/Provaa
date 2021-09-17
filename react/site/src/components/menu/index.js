@@ -14,7 +14,7 @@ export default function Cabecalho() {
             </div>
             <div className="fundos">
                 <Barrinha />
-                <div className="categorias">Alunos</div>
+                <div className="categorias">Produtos</div>
             </div>
         </ContainerMenu>
     )

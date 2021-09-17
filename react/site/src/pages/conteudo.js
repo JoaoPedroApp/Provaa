@@ -18,8 +18,9 @@ const api = new Api();
 
 export default function Conteudo() {
 
+    const [produto, SetProduto] = useState([]);
     const [nome, SetNome] =  useState('')
-    const [categoria, setCategoria] = useState([]);
+    const [categoria, setCategoria] = useState('');
     const [avaliacao, setAvaliacao] = useState('');
     const [precode, setPrecod] = useState('');
     const [precopor, setPrecopor] = useState('');
@@ -30,29 +31,15 @@ export default function Conteudo() {
 
     const loading = useRef(null);
 
+  
     async function listar() {
-        if (idAlterando != 0) {
-            let alter = await api.alterarProduto(nome, categoria, avaliacao, precode, precopor, estoque, link, descricao );
-            
-            if (alter.erro)
-                toast.error(` ${alter.erro}`)
-            else 
-                toast.dark(' Produto alterado com sucesso');
-
-        } else {
-            let inse = await api.inserirProduto(nome, categoria, avaliacao, precode, precopor, estoque, link, descricao );
-            
-            if (inse.erro) {
-                toast.error(` ${inse.erro}`)
-            }
-            else {
-                toast.dark(' Produto inserido com sucesso');
-            }
-        }
-
-        limparCampos();
-        listar();
+        loading.current.continuousStart();
+        let j = await api.listarProdutos();
+        SetProduto(j);
+        loading.current.complete();
     }
+
+    
 
 
     async function inserir() {
@@ -80,13 +67,6 @@ export default function Conteudo() {
     }
 
 
-
-    async function listar() {
-        loading.current.continuousStart();
-        let j = await api.listarCadastros();
-        SetNome(j);
-        loading.current.complete();
-    }
 
     
     function limparCampos() {
@@ -156,8 +136,6 @@ export default function Conteudo() {
                     <Traco />
                     <div className="Aluno">{idAlterando === 0 ? 'Novo Produto' : 'Alterando Produto ' + idAlterando}</div>
                 </div>
-
-
                 <div className="containerInput1">
                     <div className="box-input">
                         <div className="label">Nome:</div>
@@ -184,7 +162,7 @@ export default function Conteudo() {
                     
                 </div>    
 
-                <div className="containerInput1">
+                <div className="containerInput3">
                     <div className="box-input">
                         <div className="label">Avaliação:</div>
                         <input className="Imput" type="text" value={avaliacao} onChange={e => setAvaliacao(e.target.value)} />
@@ -196,24 +174,24 @@ export default function Conteudo() {
                     </div>
                 </div>
 
-                <div className="containerInput2">
+                <div className="containerInput4">
                     <div className="box-input">
                         <div className="label">Link imagem:</div>
                         <input className="Imput" type="text" value={link} onChange={e => setLink(e.target.value)} />
                     </div>
-                
-                    <div className="box-input1">
+                    <div className="box-input4">
                         <div className="label">Descrição:</div>
                         <textarea className="textarea" rows="10" cols="91" value={descricao} onChange={e => setDescricao(e.target.value)}></textarea>
                     </div>
 
-                    < div className="buttom"onClick={inserir} > {idAlterando === 0 ? 'Cadastrar' : 'Alterar'}</div>
-                </div>    
+                   
+                </div>     
+                < div className="buttom"onClick={inserir} > {idAlterando === 0 ? 'Cadastrar' : 'Alterar'}</div>
 
             </div> 
             
 
-            <div className="matriculados">
+            <div className="produtosss">
                 <div className="titulo">
                     <Traco />
                     <div className="novoAluno">Produtos Cadastrados </div>
@@ -223,6 +201,7 @@ export default function Conteudo() {
 
                     <thead>
                         <tr className="cabecalho">
+                            <th className="espaço"></th>
                             <th className="idTb">ID</th>
                             <th className="alunoTb">Produto</th>
                             <th className="numeroTb">Categoria</th>
@@ -235,7 +214,7 @@ export default function Conteudo() {
 
                     <tbody>
 
-                        {nome.map((item, i) => 
+                        {produto.map((item, i) => 
 
                             <tr className={i % 2 === 0 ? "linha-alternada" : ""}>
                                 <td title={item.img_produto}>
@@ -247,7 +226,6 @@ export default function Conteudo() {
                                     {item.nm_produto != null && item.nm_produto.length >= 10
                                         ? item.nm_produto.substr(0, 10) + '...'  : item.nm_produto}       
                                 </td>
-
                                 <td>{item.ds_categoria}</td>
                                 <td>{item.vl_preco_por}</td>
                                 <td>{item.qtd_estoque}</td>
