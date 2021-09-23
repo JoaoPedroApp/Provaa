@@ -43,7 +43,7 @@ export default function Conteudo() {
 
 
     async function inserir() {
-        if (idAlterando !== 0) {
+        if (idAlterando != 0) {
             let alter = await api.alterarProduto(nome, categoria, avaliacao, precode, precopor, estoque, link, descricao );
             
             if (alter.erro)
